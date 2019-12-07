@@ -1,0 +1,1 @@
+{"version":3,"file":"linter.js","sourceRoot":"","sources":["../src/linter.ts"],"names":[],"mappings":"AAAA;;;;GAIG;AACH,MAAM,MAAM,GAAG,GAAG,CAAC,EAAE;AAErB,CAAC,CAAA;AAED,IAAI,MAAM,EAAE;IACR,MAAM,CAAC,MAAM,GAAG,MAAM,CAAC;CAE1B;KAAM,IAAI,MAAM,EAAE;IACf,MAAM,CAAC,MAAM,GAAG,MAAM,CAAC;CAC1B"}

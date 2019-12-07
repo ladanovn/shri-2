@@ -1,0 +1,16 @@
+{
+  "name": "shri-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/linter.js",
+  "scripts": {
+    "start": "tsc && node build/linter.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.3"
+  }
+}
