@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function default_1(block) {
+function default_1(block, location) {
     const ruleErrors = [];
     if (block.content.length) {
         let textSize = "";
@@ -13,16 +13,7 @@ function default_1(block) {
                     ruleErrors.push({
                         error: "",
                         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-                        location: {
-                            start: {
-                                column: 1,
-                                line: 1,
-                            },
-                            end: {
-                                column: 1,
-                                line: 1
-                            }
-                        }
+                        location
                     });
                 }
             }

@@ -5,37 +5,6 @@ const rules: IBlockRules = {
     "warning": warningRules
 };
 
-const blockErrors: IError[] = [];
-
-// const recursiveLint = (block: IBlock) => {
-//     const blockErrors:IError[] = [];
-
-//     if (rules[block.block]) {
-//         rules[block.block].forEach(f => {
-//             const ruleErrors = f(block);
-//             if (ruleErrors) {
-//                 ruleErrors.forEach(e => blockErrors.push(e));
-//             }
-//         });
-//     }
-
-//     if (block.content) {
-//         block.content.forEach(block => {
-//             const childErrors = recursiveLint(block);
-//             if (childErrors) {
-//                 blockErrors.concat(childErrors);
-//             }
-//         });
-//     }
-
-//     return blockErrors;
-// };
-
-// function linter(str: string): IError[] {
-//     const json = JSON.parse(str);
-//     return recursiveLint(json);
-// }
-
 const testData: string = `{
     "block": "warning",
     "content": [
@@ -44,65 +13,69 @@ const testData: string = `{
     ]
 }`;
 
-let line: number = 1;
-let column: number = 0;
-const parentheses: {
-    value: string,
-    column: number,
-    line: number,
-    index: number
-}[] = [];
+function linter(str: string): IError[] {
+    const blockErrors: IError[] = [];
+    const parentheses: {
+        value: string,
+        column: number,
+        line: number,
+        index: number
+    }[] = [];
 
-testData.split("").forEach((symbol, index) => {
-    column += 1;
+    let line: number = 1;
+    let column: number = 0;
 
-    if (symbol === '\n') {
-        line += 1;
-        column = 1
-    };
+    str.split("").forEach((symbol, index) => {
+        column += 1;
+    
+        if (symbol === '\n') {
+            line += 1;
+            column = 1
+        };
+    
+        if (symbol === "{") {
+            parentheses.push({
+                value: "{",
+                column,
+                line,
+                index
+            });
 
-    if (symbol === "{") {
-
-        parentheses.push({
-            value: "{",
-            column,
-            line,
-            index
-        });
-
-    } else if (symbol === "}") {
-
-        if (parentheses.slice(-1)[0].value === "{") {
-
-            const block = JSON.parse(testData.slice(parentheses.slice(-1)[0].index, index + 1)) as IBlock;
+        } else if (symbol === "}") {
+            const prevParentThese = parentheses.slice(-1)[0];
             
-            if (block.block) {
-                
-                if (rules[block.block]) {
-                    
-                    rules[block.block].forEach(f => {
-                        const ruleErrors = f(block);
-                        if (ruleErrors) {
-                            ruleErrors.forEach(e => blockErrors.push(e));
-                        }
-                    });
+            if (prevParentThese.value === "{") {
+                const strBlock = str.slice(prevParentThese.index, index + 1);
+                const block = JSON.parse(strBlock) as IBlock;
+
+                if (block.block) {
+                    if (rules[block.block]) {
+                        rules[block.block].forEach(f => {
+                            const ruleErrors = f(block, {
+                                start: {
+                                    column: prevParentThese.column,
+                                    line: prevParentThese.line
+                                }, 
+                                end: {
+                                    column,
+                                    line
+                                }
+                            });
+                            if (ruleErrors) {
+                                ruleErrors.forEach(e => blockErrors.push(e));
+                            }
+                        });
+                    }
                 }
+                parentheses.pop();
             }
-
-            parentheses.pop();
-
-        } else {
-            // 
         }
+    });
 
-    }
-});
+    return blockErrors;
+}
 
-console.log(blockErrors);
-
-
-// console.log([...testData.matchAll(/{\s*"block":\s*"[a-z]+"[("a-z")\s,({("a-z")\s,:\[\]})]* \s*}/gi)])
-// console.log(linter(testData))
+console.log(JSON.stringify(linter(testData)));
 
 // if (window) {
 //     window.linter = linter;

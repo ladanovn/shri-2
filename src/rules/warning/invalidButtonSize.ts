@@ -1,6 +1,6 @@
-import { IBlock, IError } from "../../interfaces"
+import { IBlock, IError, ILocation } from "../../interfaces"
 
-export default function (block: IBlock): IError[] {
+export default function (block: IBlock, location: ILocation): IError[] {
     const ruleErrors: IError[] = [];
 
     if (block.content.length) {
@@ -16,16 +16,7 @@ export default function (block: IBlock): IError[] {
                     ruleErrors.push({
                         error: "",
                         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-                        location: {
-                            start: {
-                                column: 1,
-                                line: 1,
-                            },
-                            end: {
-                                column: 1,
-                                line: 1
-                            }
-                        }
+                        location
                     });
                 }
             }

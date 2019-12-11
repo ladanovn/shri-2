@@ -6,7 +6,7 @@ const isSizeLarger = (size1, size2) => {
     const size2Index = sizes.findIndex(size => size === size2);
     return size1Index > size2Index;
 };
-function default_1(block) {
+function default_1(block, location) {
     const ruleErrors = [];
     if (block.content.length) {
         let textSize = "";
@@ -21,16 +21,7 @@ function default_1(block) {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location: {
-                                start: {
-                                    column: 1,
-                                    line: 1,
-                                },
-                                end: {
-                                    column: 1,
-                                    line: 1
-                                }
-                            }
+                            location
                         });
                     }
                 });
@@ -42,16 +33,7 @@ function default_1(block) {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location: {
-                                start: {
-                                    column: 1,
-                                    line: 1,
-                                },
-                                end: {
-                                    column: 1,
-                                    line: 1
-                                }
-                            }
+                            location
                         });
                     }
                 }

@@ -1,4 +1,4 @@
-import { IBlock, IError } from "../../interfaces"
+import { IBlock, IError, ILocation } from "../../interfaces"
 
 const sizes = ["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl", "xxxxl", "xxxxxl"];
 
@@ -9,7 +9,7 @@ const isSizeLarger = (size1: string, size2: string): boolean => {
     return size1Index > size2Index;
 };
 
-export default function (block: IBlock): IError[] {
+export default function (block: IBlock, location: ILocation): IError[] {
     const ruleErrors: IError[] = [];
 
     if (block.content.length) {
@@ -27,16 +27,7 @@ export default function (block: IBlock): IError[] {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location: {
-                                start: {
-                                    column: 1,
-                                    line: 1,
-                                },
-                                end: {
-                                    column: 1,
-                                    line: 1
-                                }
-                            }
+                            location
                         });
                     }
                 });
@@ -48,16 +39,7 @@ export default function (block: IBlock): IError[] {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location: {
-                                start: {
-                                    column: 1,
-                                    line: 1,
-                                },
-                                end: {
-                                    column: 1,
-                                    line: 1
-                                }
-                            }
+                            location
                         });
                     }
                 } else {
