@@ -5,11 +5,12 @@ const rules: IBlockRules = {
     "warning": warningRules
 };
 
-const testData: string = `{
+const testData: string = `
+{
     "block": "warning",
     "content": [
-        { "block": "text", "mods": { "size": "l" } },
-        { "block": "text", "mods": { "size": "m" } }
+        { "block": "placeholder", "mods": { "size": "m" } },
+        { "block": "button", "mods": { "size": "m" } }
     ]
 }`;
 
@@ -30,7 +31,7 @@ function linter(str: string): IError[] {
     
         if (symbol === '\n') {
             line += 1;
-            column = 1
+            column = 0
         };
     
         if (symbol === "{") {
@@ -49,6 +50,7 @@ function linter(str: string): IError[] {
                 const block = JSON.parse(strBlock) as IBlock;
 
                 if (block.block) {
+
                     if (rules[block.block]) {
                         rules[block.block].forEach(f => {
                             const ruleErrors = f(block, {
@@ -60,7 +62,7 @@ function linter(str: string): IError[] {
                                     column,
                                     line
                                 }
-                            });
+                            }, strBlock);
                             if (ruleErrors) {
                                 ruleErrors.forEach(e => blockErrors.push(e));
                             }

@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const textSizeShouldBeEqual_1 = __importDefault(require("./textSizeShouldBeEqual"));
 const invalidButtonSize_1 = __importDefault(require("./invalidButtonSize"));
+const invalidButtonPosition_1 = __importDefault(require("./invalidButtonPosition"));
 exports.default = [
     textSizeShouldBeEqual_1.default,
-    invalidButtonSize_1.default
+    invalidButtonSize_1.default,
+    invalidButtonPosition_1.default
 ];
 //# sourceMappingURL=index.js.map

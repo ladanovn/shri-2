@@ -6,4 +6,7 @@
     "jsRules": {},
     "rules": {},
     "rulesDirectory": [],
+    "compilerOptions": {
+        "lib": ["es2020.string"]
+    }
 }

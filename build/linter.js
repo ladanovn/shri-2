@@ -7,11 +7,12 @@ const warning_1 = __importDefault(require("./rules/warning"));
 const rules = {
     "warning": warning_1.default
 };
-const testData = `{
+const testData = `
+{
     "block": "warning",
     "content": [
-        { "block": "text", "mods": { "size": "l" } },
-        { "block": "text", "mods": { "size": "m" } }
+        { "block": "placeholder", "mods": { "size": "m" } },
+        { "block": "button", "mods": { "size": "m" } }
     ]
 }`;
 function linter(str) {
@@ -23,7 +24,7 @@ function linter(str) {
         column += 1;
         if (symbol === '\n') {
             line += 1;
-            column = 1;
+            column = 0;
         }
         ;
         if (symbol === "{") {
@@ -40,6 +41,16 @@ function linter(str) {
                 const strBlock = str.slice(prevParentThese.index, index + 1);
                 const block = JSON.parse(strBlock);
                 if (block.block) {
+                    console.log({
+                        start: {
+                            column: prevParentThese.column,
+                            line: prevParentThese.line
+                        },
+                        end: {
+                            column,
+                            line
+                        }
+                    });
                     if (rules[block.block]) {
                         rules[block.block].forEach(f => {
                             const ruleErrors = f(block, {
@@ -51,7 +62,7 @@ function linter(str) {
                                     column,
                                     line
                                 }
-                            });
+                            }, strBlock);
                             if (ruleErrors) {
                                 ruleErrors.forEach(e => blockErrors.push(e));
                             }
