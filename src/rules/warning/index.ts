@@ -1,9 +1,11 @@
 import textSizeShouldBeEqual from "./textSizeShouldBeEqual";
 import invalidButtonSize from "./invalidButtonSize";
 import invalidButtonPosition from "./invalidButtonPosition";
+import invalidPlaceholderSize from "./invalidPlaceholderSize";
 
-export default [ 
+export default [
     textSizeShouldBeEqual,
     invalidButtonSize,
-    invalidButtonPosition
+    invalidButtonPosition,
+    invalidPlaceholderSize,
 ];

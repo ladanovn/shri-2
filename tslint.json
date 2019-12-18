@@ -4,9 +4,14 @@
         "tslint:recommended"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "align": false,
+        "array-type": false,
+        "object-literal-sort-keys": false,
+        "ordered-imports": false
+    },
     "rulesDirectory": [],
     "compilerOptions": {
-        "lib": ["es2020.string"]
+        "lib": ["es7"]
     }
 }

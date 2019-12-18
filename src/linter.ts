@@ -1,8 +1,8 @@
-import { IBlock, IError, IBlockRules } from "./interfaces";
+import { IBlock, IBlockRules, IError } from "./interfaces";
 import warningRules from "./rules/warning";
 
 const rules: IBlockRules = {
-    "warning": warningRules
+    warning: warningRules,
 };
 
 const testData: string = `
@@ -16,35 +16,35 @@ const testData: string = `
 
 function linter(str: string): IError[] {
     const blockErrors: IError[] = [];
-    const parentheses: {
+    const parentheses: Array<{
         value: string,
         column: number,
         line: number,
-        index: number
-    }[] = [];
+        index: number,
+    }> = [];
 
     let line: number = 1;
     let column: number = 0;
 
     str.split("").forEach((symbol, index) => {
         column += 1;
-    
-        if (symbol === '\n') {
+
+        if (symbol === "\n") {
             line += 1;
-            column = 0
-        };
-    
+            column = 0;
+        }
+
         if (symbol === "{") {
             parentheses.push({
                 value: "{",
                 column,
                 line,
-                index
+                index,
             });
 
         } else if (symbol === "}") {
             const prevParentThese = parentheses.slice(-1)[0];
-            
+
             if (prevParentThese.value === "{") {
                 const strBlock = str.slice(prevParentThese.index, index + 1);
                 const block = JSON.parse(strBlock) as IBlock;
@@ -52,19 +52,19 @@ function linter(str: string): IError[] {
                 if (block.block) {
 
                     if (rules[block.block]) {
-                        rules[block.block].forEach(f => {
+                        rules[block.block].forEach((f) => {
                             const ruleErrors = f(block, {
                                 start: {
                                     column: prevParentThese.column,
-                                    line: prevParentThese.line
-                                }, 
+                                    line: prevParentThese.line,
+                                },
                                 end: {
                                     column,
-                                    line
-                                }
+                                    line,
+                                },
                             }, strBlock);
                             if (ruleErrors) {
-                                ruleErrors.forEach(e => blockErrors.push(e));
+                                ruleErrors.forEach((e) => blockErrors.push(e));
                             }
                         });
                     }

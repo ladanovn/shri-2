@@ -1,6 +1,6 @@
 import { IBlock, IError, ILocation } from "../../interfaces"
 
-export default function (block: IBlock, location: ILocation): IError[] {
+export default function(block: IBlock, location: ILocation): IError[] {
     const ruleErrors: IError[] = [];
 
     if (block.content.length) {
@@ -10,13 +10,13 @@ export default function (block: IBlock, location: ILocation): IError[] {
             if (child.block === "text") {
                 if (!textSize) {
                     textSize = child.mods.size;
-                } 
+                }
 
                 if (textSize !== child.mods.size) {
                     ruleErrors.push({
                         error: "",
                         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-                        location
+                        location,
                     });
                 }
             }
