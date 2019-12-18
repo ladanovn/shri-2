@@ -1,71 +1,32 @@
- /// <reference lib="es2020.string" />
+import blockExtractor from "../../helper/blockExtractor";
+import { IBlock, IBlockObject, IError, ILocation } from "../../interfaces";
 
- import { IBlock, IError, ILocation } from "../../interfaces";
-
-export default function(block: IBlock, location: ILocation, strifyBlock: string): IError[] {
+export default function(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
-
-    const parentheses: {
-        value: string,
-        column: number,
-        line: number,
-        index: number,
-    }[] = [];
-
-    let line: number = location.start.line;
-    let column: number = location.start.column;
-    let existPlaceholder: boolean = false;
     const prevButton: ILocation[] = [];
+    let existPlaceholder: boolean = false;
 
-    if (block.content.length) {
-        strifyBlock.split("").forEach((symbol, index) => {
-            column += 1;
+    const blockVal: IBlockObject = JSON.parse(block.value);
 
-            if (symbol === "\n") {
-                line += 1;
-                column = 0;
-            }
+    if (blockVal.content.length) {
 
-            if (symbol === "{") {
-                parentheses.push({
-                    value: "{",
-                    column,
-                    line,
-                    index,
+        const blocks: IBlock[] = blockExtractor(block.value, block.location);
+        blocks.forEach((b) => {
+            const blockObject = JSON.parse(b.value) as IBlockObject;
+
+            if (blockObject.block === "placeholder") {
+                existPlaceholder = true;
+                prevButton.forEach((btn) => {
+                    ruleErrors.push({
+                        code: "WARNING.INVALID_BUTTON_POSITION",
+                        error: "...",
+                        location: btn,
+                    });
                 });
 
-            } else if (symbol === "}") {
-                const prevParentThese = parentheses.slice(-1)[0];
-
-                if (prevParentThese.value === "{") {
-                    const strBlock = strifyBlock.slice(prevParentThese.index, index + 1);
-                    const block = JSON.parse(strBlock) as IBlock;
-
-                    if (block.block === "placeholder") {
-                        existPlaceholder = true;
-                        prevButton.forEach((btn) => {
-                            ruleErrors.push({
-                                code: "WARNING.INVALID_BUTTON_POSITION",
-                                error: "...",
-                                location: btn,
-                            });
-                        });
-
-                    } else if (block.block === "button") {
-                        if (!existPlaceholder) {
-                            prevButton.push({
-                                start: {
-                                    column: prevParentThese.column,
-                                    line: prevParentThese.line,
-                                },
-                                end: {
-                                    column,
-                                    line,
-                                },
-                            });
-                        }
-                    }
-                    parentheses.pop();
+            } else if (blockObject.block === "button") {
+                if (!existPlaceholder) {
+                    prevButton.push(b.location);
                 }
             }
         });

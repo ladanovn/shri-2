@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function default_1(block, location) {
+function default_1(block) {
     const ruleErrors = [];
-    if (block.content.length) {
+    const blockObject = JSON.parse(block.value);
+    if (blockObject.content.length) {
         let textSize = "";
-        block.content.forEach((child) => {
+        blockObject.content.forEach((child) => {
             if (child.block === "text") {
                 if (!textSize) {
                     textSize = child.mods.size;
@@ -13,7 +14,7 @@ function default_1(block, location) {
                     ruleErrors.push({
                         error: "",
                         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-                        location
+                        location: block.location,
                     });
                 }
             }

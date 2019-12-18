@@ -3,73 +3,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const blockExtractor_1 = __importDefault(require("./helper/blockExtractor"));
 const warning_1 = __importDefault(require("./rules/warning"));
 const rules = {
-    "warning": warning_1.default
+    warning: warning_1.default,
 };
 const testData = `
 {
     "block": "warning",
     "content": [
-        { "block": "placeholder", "mods": { "size": "m" } },
-        { "block": "button", "mods": { "size": "m" } }
+        { "block": "button", "mods": { "size": "m" } },
+        { "block": "placeholder", "mods": { "size": "m" } }
     ]
 }`;
 function linter(str) {
     const blockErrors = [];
-    const parentheses = [];
-    let line = 1;
-    let column = 0;
-    str.split("").forEach((symbol, index) => {
-        column += 1;
-        if (symbol === '\n') {
-            line += 1;
-            column = 0;
-        }
-        ;
-        if (symbol === "{") {
-            parentheses.push({
-                value: "{",
-                column,
-                line,
-                index
-            });
-        }
-        else if (symbol === "}") {
-            const prevParentThese = parentheses.slice(-1)[0];
-            if (prevParentThese.value === "{") {
-                const strBlock = str.slice(prevParentThese.index, index + 1);
-                const block = JSON.parse(strBlock);
-                if (block.block) {
-                    console.log({
-                        start: {
-                            column: prevParentThese.column,
-                            line: prevParentThese.line
-                        },
-                        end: {
-                            column,
-                            line
-                        }
-                    });
-                    if (rules[block.block]) {
-                        rules[block.block].forEach(f => {
-                            const ruleErrors = f(block, {
-                                start: {
-                                    column: prevParentThese.column,
-                                    line: prevParentThese.line
-                                },
-                                end: {
-                                    column,
-                                    line
-                                }
-                            }, strBlock);
-                            if (ruleErrors) {
-                                ruleErrors.forEach(e => blockErrors.push(e));
-                            }
-                        });
+    const blocks = blockExtractor_1.default(str, {
+        start: {
+            column: 0,
+            line: 1,
+        },
+    });
+    blocks.forEach((block) => {
+        const blockVal = JSON.parse(block.value);
+        if (blockVal.block) {
+            if (rules[blockVal.block]) {
+                rules[blockVal.block].forEach((f) => {
+                    const ruleErrors = f(block);
+                    if (ruleErrors) {
+                        ruleErrors.forEach((e) => blockErrors.push(e));
                     }
-                }
-                parentheses.pop();
+                });
             }
         }
     });

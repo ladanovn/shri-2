@@ -1,12 +1,13 @@
-import { IBlock, IError, ILocation } from "../../interfaces"
+import { IBlock, IBlockObject, IError } from "../../interfaces";
 
-export default function(block: IBlock, location: ILocation): IError[] {
+export default function(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
+    const blockObject = JSON.parse(block.value);
 
-    if (block.content.length) {
+    if (blockObject.content.length) {
         let textSize: string = "";
 
-        block.content.forEach((child: IBlock) => {
+        blockObject.content.forEach((child: IBlockObject) => {
             if (child.block === "text") {
                 if (!textSize) {
                     textSize = child.mods.size;
@@ -16,7 +17,7 @@ export default function(block: IBlock, location: ILocation): IError[] {
                     ruleErrors.push({
                         error: "",
                         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-                        location,
+                        location: block.location,
                     });
                 }
             }

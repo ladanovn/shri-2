@@ -1,21 +1,24 @@
-import { IBlock, IError, ILocation } from "../../interfaces";   
+import blockExtractor from "../../helper/blockExtractor";
+import { IBlock, IError, IBlockObject } from "../../interfaces";
 
-export default function(block: IBlock, location: ILocation): IError[] {
+export default function(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
+    const blockVal: IBlockObject = JSON.parse(block.value);
 
-    if (block.content.length) {
+    if (blockVal.content.length) {
         const allowedSize: string[] = ["s", "m", "l"];
+        const blocks: IBlock[] = blockExtractor(block.value, block.location);
 
-        block.content.forEach((child: IBlock) => {
-            if (child.block === "placeholder") {
-                if (child.mods) {
-                    if (!allowedSize.includes(child.mods.size)) {
-                        // ruleErrors.push({
-                        //     error: "",
-                        //     code: "WARNING.INVALID_PLACEHOLDER_SIZE",
-                        //     location,
-                        // });
-                        // TODO:
+        blocks.forEach((b) => {
+            const blockObject = JSON.parse(b.value) as IBlockObject;
+            if (blockObject.block === "placeholder") {
+                if (blockObject.mods) {
+                    if (!allowedSize.includes(blockObject.mods.size)) {
+                        ruleErrors.push({
+                            error: "",
+                            code: "WARNING.INVALID_PLACEHOLDER_SIZE",
+                            location: b.location,
+                        });
                     }
                 }
             }

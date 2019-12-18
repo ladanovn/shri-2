@@ -2,26 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sizes = ["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl", "xxxxl", "xxxxxl"];
 const isSizeLarger = (size1, size2) => {
-    const size1Index = sizes.findIndex(size => size === size1);
-    const size2Index = sizes.findIndex(size => size === size2);
+    const size1Index = sizes.findIndex((size) => size === size1);
+    const size2Index = sizes.findIndex((size) => size === size2);
     return size1Index > size2Index;
 };
-function default_1(block, location) {
+function default_1(block) {
     const ruleErrors = [];
-    if (block.content.length) {
+    const blockVal = JSON.parse(block.value);
+    if (blockVal.content.length) {
         let textSize = "";
-        const prevButton = [];
-        block.content.forEach((child) => {
+        const prevBtnLocations = [];
+        blockVal.content.forEach((child) => {
             if (child.block === "text" && !textSize) {
                 textSize = child.mods.size;
                 // if exist buttons in front of the text
-                prevButton.forEach(btn => {
+                prevBtnLocations.forEach((location) => {
                     const buttonSize = child.mods.size;
                     if (!isSizeLarger(buttonSize, textSize)) {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location
+                            location,
                         });
                     }
                 });
@@ -33,12 +34,12 @@ function default_1(block, location) {
                         ruleErrors.push({
                             error: "",
                             code: "WARNING.INVALID_BUTTON_SIZE",
-                            location
+                            location: block.location,
                         });
                     }
                 }
                 else {
-                    prevButton.push(child);
+                    prevBtnLocations.push(block.location);
                 }
             }
         });

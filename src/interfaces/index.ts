@@ -1,28 +1,33 @@
 export interface ILocation {
     start: {
         column: number,
-        line: number
-    },
-    end: {
+        line: number,
+    };
+    end?: {
         column: number,
-        line: number
-    }
+        line: number,
+    };
 }
 
 export interface IError {
-    code: string,
-    error: string,
-    location: ILocation
+    code: string;
+    error: string;
+    location: ILocation;
 }
 
 export interface IBlockRules {
-    [block: string]: { (block: IBlock, location: ILocation, stringifyBlock?: string): IError[]; } []
+    [block: string]: ((block: IBlock) => IError[] ) [];
 }
 
 export interface IBlock {
-    block: string,
-    content: IBlock[],
-    mods: any,
-    elem: string,
-    elemMods: any
+    value: string;
+    location: ILocation;
+}
+
+export interface IBlockObject {
+    block: string;
+    content: IBlockObject[];
+    mods: any;
+    elem: string;
+    elemMods: any;
 }
