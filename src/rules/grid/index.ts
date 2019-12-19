@@ -30,9 +30,9 @@ function gridLinter(block: IBlock): IError[] {
                 if (child.content) {
                     child.content.forEach((grandChild) => {
                         if (infoFunctionalBlocks.includes(grandChild.block)) {
-                            countInfoFunctional += 1;
+                            countInfoFunctional += child.elemMods["m-col"];
                         } else if (marketingBlocks.includes(grandChild.block)) {
-                            countMarketing += 1;
+                            countMarketing += child.elemMods["m-col"];
                         }
                     });
                 }
