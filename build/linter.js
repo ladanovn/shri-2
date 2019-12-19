@@ -5,18 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const blockExtractor_1 = __importDefault(require("./helper/blockExtractor"));
 const warning_1 = __importDefault(require("./rules/warning"));
+const text_1 = __importDefault(require("./rules/text"));
+const grid_1 = __importDefault(require("./rules/grid"));
 const rules = {
     warning: warning_1.default,
+    text: text_1.default,
+    grid: grid_1.default,
 };
-const testData = `
-{
-    "block": "warning",
-    "content": [
-        { "block": "button", "mods": { "size": "m" } },
-        { "block": "placeholder", "mods": { "size": "m" } }
-    ]
-}`;
-function linter(str) {
+function lint(str) {
     const blockErrors = [];
     const blocks = blockExtractor_1.default(str, {
         start: {
@@ -39,10 +35,11 @@ function linter(str) {
     });
     return blockErrors;
 }
-console.log(JSON.stringify(linter(testData)));
-// if (window) {
-//     window.linter = linter;
-// } else if (global) {
-//     global.linter = linter;
-// }
+const isBrowser = typeof window !== "undefined";
+if (isBrowser) {
+    window.lint = lint;
+}
+else {
+    global.lint = lint;
+}
 //# sourceMappingURL=linter.js.map

@@ -1,5 +1,7 @@
-import { IBlock, IBlockRules, IBlockObject , IError } from "./interfaces";
+declare var global: any;
+declare var window: any;
 
+import { IBlock, IBlockRules, IBlockObject , IError } from "./interfaces";
 import blockExtractor from "./helper/blockExtractor";
 
 import warningRules from "./rules/warning";
@@ -12,16 +14,7 @@ const rules: IBlockRules = {
     grid: gridRules,
 };
 
-const testData: string = `
-{
-    "block": "warning",
-    "content": [
-        { "block": "button", "mods": { "size": "m" } },
-        { "block": "placeholder", "mods": { "size": "m" } }
-    ]
-}`;
-
-function linter(str: string): IError[] {
+function lint(str: string): IError[] {
     const blockErrors: IError[] = [];
     const blocks: IBlock[] = blockExtractor(str, {
         start: {
@@ -48,11 +41,11 @@ function linter(str: string): IError[] {
     return blockErrors;
 }
 
-// console.log(JSON.stringify(linter(testData)));
+const isBrowser = typeof window !== "undefined";
 
-// if (window) {
-//     window.linter = linter;
+if (isBrowser) {
+    (window as any).lint = lint;
 
-// } else if (global) {
-//     global.linter = linter;
-// }
+} else {
+    (global as any).lint = lint;
+}
