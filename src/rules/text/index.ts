@@ -1,6 +1,6 @@
 import { IBlock, IBlockObject, IError } from "../../interfaces";
 
-export default function(block: IBlock): IError[] {
+function textLinter(block: IBlock): IError[] {
     let prevBlock: string = "";
 
     return ((): IError[] => {
@@ -50,3 +50,7 @@ export default function(block: IBlock): IError[] {
         return [];
     })();
 }
+
+export default [
+    textLinter,
+];

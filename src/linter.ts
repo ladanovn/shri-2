@@ -1,10 +1,15 @@
 import { IBlock, IBlockRules, IBlockObject , IError } from "./interfaces";
 
 import blockExtractor from "./helper/blockExtractor";
+
 import warningRules from "./rules/warning";
+import textRules from "./rules/text";
+import gridRules from "./rules/grid";
 
 const rules: IBlockRules = {
     warning: warningRules,
+    text: textRules,
+    grid: gridRules,
 };
 
 const testData: string = `
