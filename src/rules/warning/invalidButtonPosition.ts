@@ -19,7 +19,7 @@ export default function(block: IBlock): IError[] {
                 prevButton.forEach((btn) => {
                     ruleErrors.push({
                         code: "WARNING.INVALID_BUTTON_POSITION",
-                        error: "...",
+                        error: "The button block in the warning block cannot be in front of the placeholder block",
                         location: btn,
                     });
                 });

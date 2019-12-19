@@ -37,12 +37,12 @@ export default function(str: string, location: ILocation): IBlock[] {
                     value,
                     location: {
                         start: {
-                            column: prevParentThese.column,
                             line: prevParentThese.line,
+                            column: prevParentThese.column,
                         },
                         end: {
-                            column,
                             line,
+                            column: column + 1,
                         },
                     },
                 });

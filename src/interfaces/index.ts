@@ -1,11 +1,11 @@
 export interface ILocation {
     start: {
-        column: number,
         line: number,
+        column: number,
     };
     end?: {
-        column: number,
         line: number,
+        column: number,
     };
 }
 

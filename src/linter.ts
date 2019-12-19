@@ -18,8 +18,8 @@ function lint(str: string): IError[] {
     const blockErrors: IError[] = [];
     const blocks: IBlock[] = blockExtractor(str, {
         start: {
-            column: 0,
             line: 1,
+            column: 0,
         },
     });
 
