@@ -8,36 +8,53 @@ import warningRules from "./rules/warning";
 import textRules from "./rules/text";
 import gridRules from "./rules/grid";
 
-function lint(str: string): IError[] {
-    const rules: IBlockRules = {
-        warning: warningRules,
-        text: textRules,
-        grid: gridRules,
-    };
-    const blockErrors: IError[] = [];
-    const blocks: IBlock[] = blockExtractor(str, {
-        start: {
-            line: 1,
-            column: 0,
-        },
-    });
+class Linter {
+    public strJSON: string;
+    private rules: IBlockRules;
+    private blockErrors: IError[];
+    private stash: any;
 
-    blocks.forEach((block) => {
-        const blockVal = JSON.parse(block.value) as IBlockObject;
+    constructor(str: string) {
+        this.strJSON = str;
+        this.rules = {
+            warning: warningRules,
+            text: textRules,
+            grid: gridRules,
+        };
+        this.blockErrors = [];
+        this.stash = {};
+    }
 
-        if (blockVal.block) {
-            if (rules[blockVal.block]) {
-                rules[blockVal.block].forEach((f) => {
-                    const ruleErrors = f(block);
-                    if (ruleErrors) {
-                        ruleErrors.forEach((e) => blockErrors.push(e));
-                    }
-                });
+    public lint(): IError[] {
+        const blocks: IBlock[] = blockExtractor(this.strJSON, {
+            start: {
+                line: 1,
+                column: 0,
+            },
+        });
+
+        blocks.forEach((block) => {
+            const blockVal = JSON.parse(block.value) as IBlockObject;
+
+            if (blockVal.block) {
+                if (this.rules[blockVal.block]) {
+                    this.rules[blockVal.block].forEach((f) => {
+                        const ruleErrors = f.bind(this)(block);
+                        if (ruleErrors) {
+                            ruleErrors.forEach((e: IError) => this.blockErrors.push(e));
+                        }
+                    });
+                }
             }
-        }
-    });
+        });
 
-    return blockErrors;
+        return this.blockErrors;
+    }
+}
+
+function lint(str: string): IError[] {
+    const linter = new Linter(str);
+    return linter.lint();
 }
 
 const isBrowser = typeof window !== "undefined";
