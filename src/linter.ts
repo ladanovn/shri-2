@@ -8,13 +8,12 @@ import warningRules from "./rules/warning";
 import textRules from "./rules/text";
 import gridRules from "./rules/grid";
 
-const rules: IBlockRules = {
-    warning: warningRules,
-    text: textRules,
-    grid: gridRules,
-};
-
 function lint(str: string): IError[] {
+    const rules: IBlockRules = {
+        warning: warningRules,
+        text: textRules,
+        grid: gridRules,
+    };
     const blockErrors: IError[] = [];
     const blocks: IBlock[] = blockExtractor(str, {
         start: {
