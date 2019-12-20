@@ -22,6 +22,7 @@ export interface IBlockRules {
 export interface IBlock {
     value: string;
     location: ILocation;
+    nestingLevel?: number;
 }
 
 export interface IBlockObject {

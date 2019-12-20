@@ -1,6 +1,6 @@
 import { IBlock, ILocation } from "../interfaces/index";
 
-export default function(str: string, location: ILocation): IBlock[] {
+export default function(str: string, location: ILocation, nestingLevel: number = 0): IBlock[] {
     const result: IBlock[] = [];
     const parentheses: {
         value: string,
@@ -45,6 +45,7 @@ export default function(str: string, location: ILocation): IBlock[] {
                             column: column + 1,
                         },
                     },
+                    nestingLevel: parentheses.length + nestingLevel,
                 });
 
                 parentheses.pop();
