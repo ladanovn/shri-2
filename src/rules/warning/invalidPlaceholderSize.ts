@@ -15,8 +15,8 @@ export default function(block: IBlock): IError[] {
                 if (blockObject.mods) {
                     if (!allowedSize.includes(blockObject.mods.size)) {
                         ruleErrors.push({
-                            error: "",
                             code: "WARNING.INVALID_PLACEHOLDER_SIZE",
+                            error: "Invalid dimensions for placeholder block",
                             location: b.location,
                         });
                     }

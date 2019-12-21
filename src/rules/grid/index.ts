@@ -21,10 +21,15 @@ function gridLinter(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const blockObject: IBlockObject = JSON.parse(block.value);
 
+    let allColumns: number = 0;
     let countInfoFunctional: number = 0;
     let countMarketing: number = 0;
 
     if (!blockObject.elem) {
+        if (blockObject.mods) {
+            allColumns = blockObject.mods["m-columns"];
+        }
+
         if (blockObject.content) {
             blockObject.content.forEach((child) => {
                 if (child.content) {
@@ -37,10 +42,10 @@ function gridLinter(block: IBlock): IError[] {
                     });
                 }
             });
-            if (countMarketing > countInfoFunctional) {
+            if (countMarketing > allColumns / 2 ) {
                 ruleErrors.push({
                     code: "GRID.TOO_MUCH_MARKETING_BLOCKS",
-                    error: "marketing blocks occupy more than half of all grid block columns",
+                    error: "Marketing blocks occupy more than half of all grid block columns",
                     location: block.location,
                 });
             }
