@@ -4,7 +4,7 @@ function textLinter(block: IBlock): IError[] {
     this.stash.isExistH1 = this.stash.isExistH1 || false;
     this.stash.prevLevel = 0;
     this.stash.prevBlockByLevel = this.stash.prevBlockByLevel || [];
-    
+
     const ruleErrors: IError[] = [];
     const blockObject: IBlockObject = JSON.parse(block.value);
 

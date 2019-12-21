@@ -52,7 +52,7 @@ class Linter {
     }
 }
 
-function lint(str: string): IError[] {
+export default function lint(str: string): IError[] {
     const linter = new Linter(str);
     return linter.lint();
 }

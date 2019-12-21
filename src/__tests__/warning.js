@@ -1,7 +1,4 @@
-declare var global: any;
-
-import { IError } from "../interfaces/index";
-import "../../build/linter";
+require("../../build/linter");
 
 const testData1 = `{
     "block": "warning",
@@ -26,7 +23,7 @@ const testData2 = `{
 }`;
 
 test("button have 1 error of invalid positions", () => {
-    const exprectErrors: IError[] = [{
+    const exprectErrors = [{
         code: "WARNING.INVALID_BUTTON_POSITION",
         error: "The button block in the warning block cannot be in front of the placeholder block",
         location: {
@@ -40,13 +37,13 @@ test("button have 1 error of invalid positions", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = global.lint(testData1);
+    const receivedErrors = global.lint(testData1);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
 test("text block have different size", () => {
-    const exprectErrors: IError[] = [{
+    const exprectErrors = [{
         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
         error: "All texts (blocks of text) in the warning block must be the same size",
         location: {
@@ -60,7 +57,7 @@ test("text block have different size", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = global.lint(testData2);
+    const receivedErrors = global.lint(testData2);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });

@@ -5,7 +5,7 @@
   "main": "build/linter.js",
   "scripts": {
     "start": "tsc && node dist/linter.js",
-    "test": "jest",
+    "test": "webpack && jest",
     "lint": "tslint --fix -c ./tslint.json 'src/**/*{.ts,.tsx}'",
     "build": "webpack"
   },
