@@ -1,5 +1,5 @@
-
-import { IBlock, IError } from "../../interfaces";
+import blockExtractor from "../../helper/blockExtractor";
+import { IBlock, IError, IBlockObject } from "../../interfaces";
 
 export default function (block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
@@ -8,32 +8,34 @@ export default function (block: IBlock): IError[] {
     if (blockObject.content.length) {
         let textSize: string = "";
 
-        for (const child of blockObject.content) {
-            if (child.block === "text") {
-                if (child.mods) {
-                    if (child.mods.size) {
+        const childBlocks: IBlock[] = blockExtractor(block.value, block.location);
+        childBlocks.forEach((child: IBlock) => {
+            const childBlockObject: IBlockObject = JSON.parse(child.value);
+            if (childBlockObject.block === "text") {
+                if (childBlockObject.mods) {
+                    if (childBlockObject.mods.size) {
                         if (!textSize) {
-                            textSize = child.mods.size;
+                            textSize = childBlockObject.mods.size;
                         }
 
-                        if (textSize !== child.mods.size) {
-                            ruleErrors.push({
+                        if (textSize !== childBlockObject.mods.size) {
+                            return [{
                                 code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
                                 error: "All texts (blocks of text) in the warning block must be the same size",
                                 location: block.location,
-                            });
+                            }];
                         }
 
                     } else {
-                        ruleErrors.push({
+                        return [{
                             code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
                             error: "All texts (blocks of text) in the warning block must be the same size",
                             location: block.location,
-                        });
+                        }];
                     }
                 }
             }
-        }
+        });
     }
     return ruleErrors;
 }
