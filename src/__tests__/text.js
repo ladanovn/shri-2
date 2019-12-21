@@ -42,6 +42,25 @@ const testData3 = `{
     ]
 }`;
 
+const testData4 = `{
+    "block": "warning",
+    "content": [
+        {
+            "block": "warning",
+            "content": [
+                {
+                    "block": "text",
+                    "mods": { "type": "h2" }
+                }
+            ]
+        },
+        {
+            "block": "text",
+            "mods": { "type": "h1" }
+        }
+    ]    
+}`
+
 test("Several H1", () => {
     const exprectErrors = [{
         code: "TEXT.SEVERAL_H1",
@@ -100,3 +119,24 @@ test("H3 block before H2", () => {
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
+
+test("H2 block before H1 on deeper level of nesting", () => {
+    const exprectErrors = [{
+        code: "TEXT.INVALID_H2_POSITION",
+        error: "The heading of the 2 level cannot be before the heading of the 1 level at the same or deeper level of nesting",        
+        location: {
+            start: {
+                line: 7,
+                column: 17,
+            },
+            end: {
+                line: 10,
+                column: 18,
+            },
+        },
+    }];
+    const receivedErrors = lint(testData4);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
+

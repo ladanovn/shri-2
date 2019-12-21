@@ -39,8 +39,8 @@ function gridLinter(block: IBlock): IError[] {
             });
             if (countMarketing > countInfoFunctional) {
                 ruleErrors.push({
-                    error: "...",
                     code: "GRID.TOO_MUCH_MARKETING_BLOCKS",
+                    error: "marketing blocks occupy more than half of all grid block columns",
                     location: block.location,
                 });
             }
