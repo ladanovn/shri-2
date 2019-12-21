@@ -1,7 +1,7 @@
 require("../../build/linter");
 
 const testData1 = `{
-    "block": "warning",
+    "block": "payment",
     "content": [
         {
             "block": "text",
@@ -15,7 +15,7 @@ const testData1 = `{
 }`;
 
 const testData2 = `{
-    "block": "warning",
+    "block": "payment",
     "content": [
         {
             "block": "text",
@@ -29,7 +29,7 @@ const testData2 = `{
 }`;
 
 const testData3 = `{
-    "block": "warning",
+    "block": "payment",
     "content": [
         {
             "block": "text",
@@ -43,10 +43,10 @@ const testData3 = `{
 }`;
 
 const testData4 = `{
-    "block": "warning",
+    "block": "payment",
     "content": [
         {
-            "block": "warning",
+            "block": "payment",
             "content": [
                 {
                     "block": "text",
