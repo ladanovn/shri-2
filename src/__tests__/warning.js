@@ -3,13 +3,18 @@ require("../../build/linter");
 const testData1 = `{
     "block": "warning",
     "content": [
-        { "block": "button", "mods": { "size": "m" } },
+        { 
+            "block": "wrapper",
+            "content": [
+                { "block": "button", "mods": { "size": "m" } }
+            ]
+        },
         { "block": "placeholder", "mods": { "size": "m" } }
     ]
 }`;
 
 const testData2 = `{
-    "block": "payment",
+    "block": "wrapper",
     "content": [
         { "block": "text", "mods": { "size": "l" } },
         {
@@ -28,12 +33,12 @@ test("button have 1 error of invalid positions", () => {
         error: "The button block in the warning block cannot be in front of the placeholder block",
         location: {
             start: {
-                line: 4,
-                column: 9,
+                line: 7,
+                column: 17,
             },
             end: {
-                line: 4,
-                column: 55,
+                line: 7,
+                column: 63,
             },
         },
     }];
