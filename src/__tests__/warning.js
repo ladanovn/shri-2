@@ -9,7 +9,7 @@ const testData1 = `{
 }`;
 
 const testData2 = `{
-    "block": "warning",
+    "block": "payment",
     "content": [
         { "block": "text", "mods": { "size": "l" } },
         {

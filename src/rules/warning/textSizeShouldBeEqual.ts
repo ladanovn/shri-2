@@ -9,7 +9,7 @@ export default function (block: IBlock): IError[] {
         let textSize: string = "";
 
         const childBlocks: IBlock[] = blockExtractor(block.value, block.location);
-        childBlocks.forEach((child: IBlock) => {
+        for (const child of childBlocks) {
             const childBlockObject: IBlockObject = JSON.parse(child.value);
             if (childBlockObject.block === "text") {
                 if (childBlockObject.mods) {
@@ -35,7 +35,7 @@ export default function (block: IBlock): IError[] {
                     }
                 }
             }
-        });
+        }
     }
     return ruleErrors;
 }
