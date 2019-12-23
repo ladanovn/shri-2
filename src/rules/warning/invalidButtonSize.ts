@@ -8,7 +8,7 @@ const isSizeLarger = (size1: string, size2: string): boolean => {
     const size1Index = sizes.findIndex((size) => size === size1);
     const size2Index = sizes.findIndex((size) => size === size2);
 
-    return size1Index > size2Index;
+    return size1Index - size2Index === 1;
 };
 
 export default function(block: IBlock): IError[] {

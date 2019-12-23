@@ -27,6 +27,14 @@ const testData2 = `{
     ]
 }`;
 
+const testData3 = `{
+    "block": "warning",
+    "content": [
+        { "block": "text", "mods": { "size": "l" } },
+        { "block": "button", "mods": { "size": "xxl" } }
+    ]
+}`;
+
 test("button have 1 error of invalid positions", () => {
     const exprectErrors = [{
         code: "WARNING.INVALID_BUTTON_POSITION",
@@ -63,6 +71,26 @@ test("text block have different size", () => {
         },
     }];
     const receivedErrors = global.lint(testData2);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
+
+test("button size larger on 2 step than text block", () => {
+    const exprectErrors = [{
+        code: "WARNING.INVALID_BUTTON_SIZE",
+        error: "The button block size must be 1 step larger than text block",
+        location: {
+            start: {
+                line: 5,
+                column: 9,
+            },
+            end: {
+                line: 5,
+                column: 57,
+            },
+        },
+    }];
+    const receivedErrors = global.lint(testData3);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });

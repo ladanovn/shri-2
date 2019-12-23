@@ -59,7 +59,30 @@ const testData4 = `{
             "mods": { "type": "h1" }
         }
     ]    
-}`
+}`;
+
+const testData5 = `{
+    "block": "warning",
+    "content": [
+        {
+            "block": "placeholder",
+            "mods": { "size": "m" }
+        },
+        {
+            "elem": "content",
+            "content": [
+                {
+                    "block": "text",
+                    "mods": { "size": "m" }
+                },
+                {
+                    "block": "text",
+                    "mods": { "size": "l" }
+                }
+            ]
+        }
+    ]
+}`;
 
 test("Several H1", () => {
     const exprectErrors = [{
@@ -140,3 +163,16 @@ test("H2 block before H1 on deeper level of nesting", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
+test("text block have different size", () => {
+    const exprectErrors = [ {
+        code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
+        error: "All texts (blocks of text) in the warning block must be the same size",
+        location: {
+            start: { line: 1, column: 1 },
+            end: { line: 22, column: 2 }
+        }
+    }];
+    const receivedErrors = lint(testData5);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
