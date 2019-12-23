@@ -1,4 +1,5 @@
 import { IBlock, IBlockObject, IError } from "../../interfaces";
+import blockExtractor from "../../helper/blockExtractor";
 
 const infoFunctionalBlocks: string[] = [
     "payment",
@@ -21,37 +22,38 @@ function gridLinter(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const blockObject: IBlockObject = JSON.parse(block.value);
 
-    let allColumns: number = 0;
     let countInfoFunctional: number = 0;
     let countMarketing: number = 0;
 
     if (!blockObject.elem) {
-        if (blockObject.mods) {
-            allColumns = blockObject.mods["m-columns"];
-        }
-        
-        if (blockObject.content) {
-            blockObject.content.forEach((child) => {
-                if (child.content) {
-                    child.content.forEach((grandChild) => {
-                        if (infoFunctionalBlocks.includes(grandChild.block)) {
-                            countInfoFunctional += Number(child.elemMods["m-col"]);
-                        } else if (marketingBlocks.includes(grandChild.block)) {
-                            countMarketing += Number(child.elemMods["m-col"]);
-                        }
-                    });
+
+        const blocks: IBlock[] = blockExtractor(block.value, block.location);
+        for (const child of blocks) {
+            const childObject: IBlockObject = JSON.parse(child.value);
+
+            if (childObject.content && childObject.elemMods) {
+                if (childObject.content.length === 1) {
+                    const typeChildObject = childObject.content[0].block;
+
+                    if (infoFunctionalBlocks.includes(typeChildObject)) {
+                        countInfoFunctional += Number(childObject.elemMods["m-col"]);
+                    } else if (marketingBlocks.includes(typeChildObject)) {
+                        countMarketing += Number(childObject.elemMods["m-col"]);
+                    }
                 }
-            });
-            if (countMarketing > allColumns / 2 ) {
-                ruleErrors.push({
-                    code: "GRID.TOO_MUCH_MARKETING_BLOCKS",
-                    error: "Marketing blocks occupy more than half of all grid block columns",
-                    location: block.location,
-                });
             }
         }
-    }
 
+        if (countMarketing > countInfoFunctional) {
+            ruleErrors.push({
+                code: "GRID.TOO_MUCH_MARKETING_BLOCKS",
+                error: "Marketing blocks occupy more than half of all grid block columns",
+                location: block.location,
+            });
+        }
+
+    }
+    
     return ruleErrors;
 }
 

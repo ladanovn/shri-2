@@ -66,6 +66,67 @@ const testData2 = `{
     ]
 }`;
 
+const testData3 = `{
+    "block": "grid",
+    "mods": {
+        "m-columns": "10"
+    },
+    "content": [
+        {
+            "block": "grid",
+            "elem": "fraction",
+            "elemMods": {
+                "m-col": "4"
+            },
+            "content": [
+                {
+                    "block": "payment"
+                }
+            ]
+        },
+        {
+            "block": "grid",
+            "elem": "fraction",
+            "elemMods": {
+                "m-col": "6"
+            },
+            "content": [
+                {
+                    "block": "grid",
+                    "m-columns": "10",
+                    "content": [
+                        {
+                            "block": "grid",
+                            "elem": "fraction",
+                            "elemMods": {
+                                "m-col": "8"
+                            },
+                            "content": [
+                                {
+                                    "block": "payment"
+                                }
+                            ]
+                        },
+                        {
+                            "block": "grid",
+                            "elem": "fraction",
+                            "elemMods": {
+                                "m-col": "2"
+                            },
+                            "content": [
+                                {
+                                    "block": "offer"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}`;
+
+
 test("marketing blocks no more than half", () => {
     const exprectErrors = [];
     const receivedErrors = global.lint(testData1);
@@ -89,6 +150,13 @@ test("marketing blocks more than half", () => {
         },
     }];
     const receivedErrors = global.lint(testData2);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
+
+test("nested grid blocks nested grid blocks with proper type distribution", () => {
+    const exprectErrors = [];
+    const receivedErrors = global.lint(testData3);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });

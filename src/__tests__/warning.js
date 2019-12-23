@@ -3,6 +3,19 @@ require("../../build/linter");
 const testData1 = `{
     "block": "warning",
     "content": [
+        { "block": "placeholder", "mods": { "size": "m" } },
+        { 
+            "block": "wrapper",
+            "content": [
+                { "block": "button", "mods": { "size": "m" } }
+            ]
+        }
+    ]
+}`;
+
+const testData2 = `{
+    "block": "warning",
+    "content": [
         { 
             "block": "wrapper",
             "content": [
@@ -13,7 +26,7 @@ const testData1 = `{
     ]
 }`;
 
-const testData2 = `{
+const testData3 = `{
     "block": "wrapper",
     "content": [
         { "block": "text", "mods": { "size": "l" } },
@@ -27,13 +40,20 @@ const testData2 = `{
     ]
 }`;
 
-const testData3 = `{
+const testData4 = `{
     "block": "warning",
     "content": [
         { "block": "text", "mods": { "size": "l" } },
         { "block": "button", "mods": { "size": "xxl" } }
     ]
 }`;
+
+test("button haven't position error", () => {
+    const exprectErrors = [];
+    const receivedErrors = global.lint(testData1);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
 
 test("button have 1 error of invalid positions", () => {
     const exprectErrors = [{
@@ -50,7 +70,7 @@ test("button have 1 error of invalid positions", () => {
             },
         },
     }];
-    const receivedErrors = global.lint(testData1);
+    const receivedErrors = global.lint(testData2);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
@@ -70,7 +90,7 @@ test("text block have different size", () => {
             },
         },
     }];
-    const receivedErrors = global.lint(testData2);
+    const receivedErrors = global.lint(testData3);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
@@ -90,7 +110,7 @@ test("button size larger on 2 step than text block", () => {
             },
         },
     }];
-    const receivedErrors = global.lint(testData3);
+    const receivedErrors = global.lint(testData4);
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
