@@ -53,7 +53,7 @@ function gridLinter(block: IBlock): IError[] {
         }
 
     }
-    
+
     return ruleErrors;
 }
 

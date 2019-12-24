@@ -1,7 +1,7 @@
 import blockExtractor from "../../helper/blockExtractor";
 import { IBlock, IError, IBlockObject } from "../../interfaces";
 
-export default function (block: IBlock): IError[] {
+export default function(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const blockObject = JSON.parse(block.value);
 
