@@ -163,7 +163,7 @@ test("H2 block before H1 on deeper level of nesting", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("text block have different size", () => {
+test("Text block have different size", () => {
     const exprectErrors = [ {
         code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
         error: "All texts (blocks of text) in the warning block must be the same size",
@@ -173,6 +173,15 @@ test("text block have different size", () => {
         }
     }];
     const receivedErrors = lint(testData5);
+
+    expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
+});
+
+test("Text block have different size, option WARNING.TEXT_SIZES_SHOULD_BE_EQUAL set false", () => {
+    const exprectErrors = [];
+    const receivedErrors = lint(testData5, {
+        "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL": false
+    });
 
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });

@@ -11,20 +11,32 @@ import gridRules from "./rules/grid";
 class Linter {
     public strJSON: string;
     private blockErrors: IError[];
-    private rules: IBlockRules;
+    private allRules: IBlockRules;
+    private rules: {
+        [name: string]: boolean,
+    };
     private rulesContext: {
         [ruleName: string]: any,
     };
 
-    constructor(str: string) {
+    constructor(str: string, rules?: {
+        [name: string]: boolean,
+    }) {
         this.strJSON = str;
-        this.rules = {
+        this.allRules = {
             warning: warningRules,
             text: textRules,
             grid: gridRules,
         };
         this.blockErrors = [];
+        this.rules = {};
         this.rulesContext = {};
+
+        // set all rules by default equal true,
+        // change them to custom if defined
+        Object.values(this.allRules).flat(1).forEach((rule) => {
+            this.rules[rule.rule] = rules ? rules[rule.rule] : true;
+        });
     }
 
     public lint(): IError[] {
@@ -39,8 +51,8 @@ class Linter {
             const blockVal = JSON.parse(block.value) as IBlockObject;
 
             if (blockVal.block) {
-                if (this.rules[blockVal.block]) {
-                    this.rules[blockVal.block].forEach((rule) => this.lintRule(rule, block));
+                if (this.allRules[blockVal.block]) {
+                    this.allRules[blockVal.block].forEach((rule) => this.lintRule(rule, block));
                 }
             }
         });
@@ -48,20 +60,24 @@ class Linter {
         return this.blockErrors;
     }
 
-    private lintRule(f: IBlockRule, block: IBlock) {
-        if (!this.rulesContext[f.rule]) {
-            this.rulesContext[f.rule] = {};
-        }
-        const ruleErrors = f.linter.bind(this)(block);
+    private lintRule(rule: IBlockRule, block: IBlock) {
+        if (this.rules[rule.rule]) {
+            if (!this.rulesContext[rule.rule]) {
+                this.rulesContext[rule.rule] = {};
+            }
+            const ruleErrors = rule.linter.bind(this)(block);
 
-        if (ruleErrors) {
-            ruleErrors.forEach((e: IError) => this.blockErrors.push(e));
+            if (ruleErrors) {
+                ruleErrors.forEach((e: IError) => this.blockErrors.push(e));
+            }
         }
     }
 }
 
-export default function lint(str: string): IError[] {
-    const linter = new Linter(str);
+export default function lint(str: string, rules?: {
+    [name: string]: boolean,
+}): IError[] {
+    const linter = new Linter(str, rules);
     return linter.lint();
 }
 
