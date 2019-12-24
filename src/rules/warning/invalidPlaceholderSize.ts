@@ -1,7 +1,10 @@
 import blockExtractor from "../../helper/blockExtractor";
 import { IBlock, IError, IBlockObject } from "../../interfaces";
 
-export default function(block: IBlock): IError[] {
+export const errorCode: string = "WARNING.INVALID_PLACEHOLDER_SIZE";
+export const errorMessage: string = "Invalid dimensions for placeholder block";
+
+export function linter(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const blockVal: IBlockObject = JSON.parse(block.value);
 
@@ -15,8 +18,8 @@ export default function(block: IBlock): IError[] {
                 if (blockObject.mods) {
                     if (!allowedSize.includes(blockObject.mods.size)) {
                         ruleErrors.push({
-                            code: "WARNING.INVALID_PLACEHOLDER_SIZE",
-                            error: "Invalid dimensions for placeholder block",
+                            code: errorCode,
+                            error: errorMessage,
                             location: b.location,
                         });
                     }

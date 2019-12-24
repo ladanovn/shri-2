@@ -11,7 +11,10 @@ const isSizeLarger = (size1: string, size2: string): boolean => {
     return size1Index - size2Index === 1;
 };
 
-export default function(block: IBlock): IError[] {
+export const errorCode: string = "WARNING.INVALID_BUTTON_SIZE";
+export const errorMessage: string = "The button block size must be 1 step larger than text block";
+
+export function linter(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const blockObject: IBlockObject = JSON.parse(block.value);
 
@@ -31,8 +34,8 @@ export default function(block: IBlock): IError[] {
                     const buttonSize = childBlockObject.mods.size;
                     if (!isSizeLarger(buttonSize, textSize)) {
                         ruleErrors.push({
-                            code: "WARNING.INVALID_BUTTON_SIZE",
-                            error: "The button block size must be 1 step larger than text block",
+                            code: errorCode,
+                            error: errorMessage,
                             location,
                         });
                     }
@@ -43,8 +46,8 @@ export default function(block: IBlock): IError[] {
                     const buttonSize = childBlockObject.mods.size;
                     if (!isSizeLarger(buttonSize, textSize)) {
                         ruleErrors.push({
-                            code: "WARNING.INVALID_BUTTON_SIZE",
-                            error: "The button block size must be 1 step larger than text block",
+                            code: errorCode,
+                            error: errorMessage,
                             location: child.location,
                         });
                     }

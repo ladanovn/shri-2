@@ -1,7 +1,5 @@
-declare var global: any;
-
-import { IError, IBlock } from "../../interfaces/index";
-import rules from "./index";
+import { IError } from "../../interfaces/index";
+import { linter, errorCode, errorMessage } from "./tooMuchMarketingBlocks";
 
 const testData1: string = `{
     "block": "grid",
@@ -69,10 +67,9 @@ const testData2: string = `{
     ]
 }`;
 
-test("marketing blocks no more than half", () => {
-    const rule: (block: IBlock) => IError[] = rules[0];
+test("Marketing blocks no more than half", () => {
     const exprectErrors: IError[] = [];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: testData1,
         location: {
             start: {
@@ -85,11 +82,10 @@ test("marketing blocks no more than half", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("marketing grid fractions more than half", () => {
-    const rule: (block: IBlock) => IError[] = rules[0];
+test("Marketing grid fractions more than half", () => {
     const exprectErrors: IError[] = [{
-        code: "GRID.TOO_MUCH_MARKETING_BLOCKS",
-        error: "Marketing blocks occupy more than half of all grid block columns",
+        code: errorCode,
+        error: errorMessage,
         location: {
             start: {
                 line: 1,
@@ -101,7 +97,7 @@ test("marketing grid fractions more than half", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: testData2,
         location: {
             start: {

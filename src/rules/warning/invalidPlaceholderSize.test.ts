@@ -1,5 +1,5 @@
 import { IError } from "../../interfaces/index";
-import rule from "./invalidPlaceholderSize";
+import { linter, errorCode, errorMessage } from "./invalidPlaceholderSize";
 
 const trueBlock = `{
     "block": "warning",
@@ -15,9 +15,9 @@ const errorBlock = `{
     ]
 }`;
 
-test("warning block have only valid placeholders size", () => {
+test("Warning block have only valid placeholders size", () => {
     const exprectErrors: IError[] = [];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: trueBlock,
         location: {
             start: {
@@ -30,10 +30,10 @@ test("warning block have only valid placeholders size", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("warning block have invalid placeholder", () => {
+test("Warning block have invalid placeholder", () => {
     const exprectErrors: IError[] = [{
-        code: "WARNING.INVALID_PLACEHOLDER_SIZE",
-        error: "Invalid dimensions for placeholder block",
+        code: errorCode,
+        error: errorMessage,
         location: {
             start: {
                 line: 4,
@@ -45,7 +45,7 @@ test("warning block have invalid placeholder", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: errorBlock,
         location: {
             start: {

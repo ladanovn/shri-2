@@ -1,5 +1,5 @@
 import { IError } from "../../interfaces/index";
-import rule from "./invalidButtonPosition";
+import { linter, errorCode, errorMessage } from "./invalidButtonPosition";
 
 const trueBlock = `{
     "block": "warning",
@@ -17,9 +17,9 @@ const errorBlock = `{
     ]
 }`;
 
-test("button have valid position, without errors", () => {
+test("Button have valid position, without errors", () => {
     const exprectErrors: IError[] = [];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: trueBlock,
         location: {
             start: {
@@ -32,10 +32,10 @@ test("button have valid position, without errors", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("button have 1 error of invalid positions", () => {
+test("Button have 1 error of invalid positions", () => {
     const exprectErrors: IError[] = [{
-        code: "WARNING.INVALID_BUTTON_POSITION",
-        error: "The button block in the warning block cannot be in front of the placeholder block",
+        code: errorCode,
+        error: errorMessage,
         location: {
             start: {
                 line: 4,
@@ -47,7 +47,7 @@ test("button have 1 error of invalid positions", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: errorBlock,
         location: {
             start: {

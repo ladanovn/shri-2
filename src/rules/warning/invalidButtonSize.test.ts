@@ -1,5 +1,5 @@
 import { IError } from "../../interfaces/index";
-import rule from "./invalidButtonSize";
+import { linter, errorCode, errorMessage } from "./invalidButtonSize";
 
 const trueBlock = `{
     "block": "warning",
@@ -19,7 +19,7 @@ const errorBlock = `{
 
 test("All button block have size larger than text block", () => {
     const exprectErrors: IError[] = [];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: trueBlock,
         location: {
             start: {
@@ -32,10 +32,10 @@ test("All button block have size larger than text block", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("button block have size smaller than text block", () => {
+test("Button block have size smaller than text block", () => {
     const exprectErrors: IError[] = [{
-        code: "WARNING.INVALID_BUTTON_SIZE",
-        error: "The button block size must be 1 step larger than text block",
+        code: errorCode,
+        error: errorMessage,
         location: {
             start: {
                 line: 5,
@@ -47,7 +47,7 @@ test("button block have size smaller than text block", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: errorBlock,
         location: {
             start: {

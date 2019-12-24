@@ -1,7 +1,10 @@
 import { IBlock, IBlockObject, IError } from "../../interfaces";
 
-export default function(block: IBlock): IError[] {
-    const ctx = this.ruleContext;
+export const errorCode: string = "TEXT.SEVERAL_H1";
+export const errorMessage: string = "The 1 level heading on the page should be the only one";
+
+export function linter(block: IBlock): IError[] {
+    const ctx = this.rulesContext[errorCode];
     ctx.isExistH1 = ctx.isExistH1 || false;
 
     const ruleErrors: IError[] = [];
@@ -12,8 +15,8 @@ export default function(block: IBlock): IError[] {
             if (blockObject.mods.type === "h1") {
                 if (ctx.isExistH1) {
                     ruleErrors.push({
-                        code: "TEXT.SEVERAL_H1",
-                        error: "The 1 level heading on the page should be the only one",
+                        code: errorCode,
+                        error: errorMessage,
                         location: block.location,
                     });
                 } else {

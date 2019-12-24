@@ -9,8 +9,11 @@ const isHeaderLarge = (a: string, b: string): boolean => {
     }
 };
 
-export default function(block: IBlock): IError[] {
-    const ctx = this.ruleContext;
+export const errorCode: string = "TEXT.INVALID_H3_POSITION";
+export const errorMessage: string = "The heading of the 3 level cannot be before the heading of the 2 level at the same or deeper level of nesting";
+
+export function linter(block: IBlock): IError[] {
+    const ctx = this.rulesContext[errorCode];
 
     ctx.prevLevel = ctx.prevLevel || 0;
     ctx.prevMaxBlock = ctx.prevMaxBlock || {
@@ -38,8 +41,8 @@ export default function(block: IBlock): IError[] {
                         case "h2":
                             if (ctx.prevMaxBlock.value === "h3") {
                                 ruleErrors.push({
-                                    code: "TEXT.INVALID_H3_POSITION",
-                                    error: "The heading of the 3 level cannot be before the heading of the 2 level at the same or deeper level of nesting",
+                                    code: errorCode,
+                                    error: errorMessage,
                                     location: ctx.prevMaxBlock.location,
                                 });
                             }
@@ -78,8 +81,8 @@ export default function(block: IBlock): IError[] {
                     if (blockObject.mods.type === "h2") {
                         if (ctx.prevMaxBlock.value === "h3") {
                             ruleErrors.push({
-                                code: "TEXT.INVALID_H3_POSITION",
-                                error: "The heading of the 3 level cannot be before the heading of the 2 level at the same or deeper level of nesting",
+                                code: errorCode,
+                                error: errorMessage,
                                 location: ctx.prevMaxBlock.location,
                             });
                         }

@@ -15,8 +15,13 @@ export interface IError {
     location: ILocation;
 }
 
+export interface IBlockRule {
+    rule: string;
+    linter: (block: IBlock) => IError[];
+}
+
 export interface IBlockRules {
-    [block: string]: ((block: IBlock) => IError[] ) [];
+    [block: string]: IBlockRule[];
 }
 
 export interface IBlock {

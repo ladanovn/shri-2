@@ -1,7 +1,10 @@
 import blockExtractor from "../../helper/blockExtractor";
 import { IBlock, IBlockObject, IError, ILocation } from "../../interfaces";
 
-export default function(block: IBlock): IError[] {
+export const errorCode: string = "WARNING.INVALID_BUTTON_POSITION";
+export const errorMessage: string = "The button block in the warning block cannot be in front of the placeholder block";
+
+export function linter(block: IBlock): IError[] {
     const ruleErrors: IError[] = [];
     const prevButton: ILocation[] = [];
     let existPlaceholder: boolean = false;
@@ -18,8 +21,8 @@ export default function(block: IBlock): IError[] {
                 existPlaceholder = true;
                 prevButton.forEach((btn) => {
                     ruleErrors.push({
-                        code: "WARNING.INVALID_BUTTON_POSITION",
-                        error: "The button block in the warning block cannot be in front of the placeholder block",
+                        code: errorCode,
+                        error: errorMessage,
                         location: btn,
                     });
                 });

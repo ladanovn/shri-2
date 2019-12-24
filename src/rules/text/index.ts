@@ -1,9 +1,18 @@
-import severalH1 from "./severalH1";
-import invalidH2Position from "./invalidH2Position";
-import invalidH3Position from "./invalidH3Position";
+import {linter as H1Linter, errorCode as H1ErrorCode} from "./severalH1";
+import {linter as H2Linter, errorCode as H2ErrorCode} from "./invalidH2Position";
+import {linter as H3Linter, errorCode as H3ErrorCode} from "./invalidH3Position";
 
 export default [
-    severalH1,
-    invalidH2Position,
-    invalidH3Position,
+    {
+        rule: H1ErrorCode,
+        linter: H1Linter,
+    },
+    {
+        rule: H2ErrorCode,
+        linter: H2Linter,
+    },
+    {
+        rule: H3ErrorCode,
+        linter: H3Linter,
+    },
 ];

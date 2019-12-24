@@ -1,5 +1,5 @@
 import { IError } from "../../interfaces/index";
-import rule from "./textSizeShouldBeEqual";
+import { linter, errorCode, errorMessage } from "./textSizeShouldBeEqual";
 
 const trueBlock = `{
     "block": "warning",
@@ -17,9 +17,9 @@ const errorBlock = `{
     ]
 }`;
 
-test("warning block with same text size, without errors", () => {
+test("Warning block with same text size, without errors", () => {
     const exprectErrors: IError[] = [];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: trueBlock,
         location: {
             start: {
@@ -32,10 +32,10 @@ test("warning block with same text size, without errors", () => {
     expect(JSON.stringify(receivedErrors)).toBe(JSON.stringify(exprectErrors));
 });
 
-test("warning block with different test size return error", () => {
+test("Warning block with different test size return error", () => {
     const exprectErrors: IError[] = [{
-        code: "WARNING.TEXT_SIZES_SHOULD_BE_EQUAL",
-        error: "All texts (blocks of text) in the warning block must be the same size",
+        code: errorCode,
+        error: errorMessage,
         location: {
             start: {
                 line: 1,
@@ -47,7 +47,7 @@ test("warning block with different test size return error", () => {
             },
         },
     }];
-    const receivedErrors: IError[] = rule({
+    const receivedErrors: IError[] = linter({
         value: errorBlock,
         location: {
             start: {
