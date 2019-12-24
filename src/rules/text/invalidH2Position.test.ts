@@ -1,6 +1,6 @@
 import { IError } from "../../interfaces/index";
 import { errorCode, errorMessage } from "./invalidH2Position";
-import lint from "../../linter";
+import lint from "../..";
 
 const trueBlock = `{
     "block": "payment",

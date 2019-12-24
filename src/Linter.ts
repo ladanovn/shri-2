@@ -1,6 +1,3 @@
-declare var global: any;
-declare var window: any;
-
 import { IBlock, IBlockRule, IBlockRules, IBlockObject, IError } from "./interfaces";
 import blockExtractor from "./helper/blockExtractor";
 
@@ -8,7 +5,7 @@ import warningRules from "./rules/warning";
 import textRules from "./rules/text";
 import gridRules from "./rules/grid";
 
-class Linter {
+export default class Linter {
     public strJSON: string;
     private blockErrors: IError[];
     private allRules: IBlockRules;
@@ -72,20 +69,4 @@ class Linter {
             }
         }
     }
-}
-
-export default function lint(str: string, rules?: {
-    [name: string]: boolean,
-}): IError[] {
-    const linter = new Linter(str, rules);
-    return linter.lint();
-}
-
-const isBrowser = typeof window !== "undefined";
-
-if (isBrowser) {
-    (window as any).lint = lint;
-
-} else {
-    (global as any).lint = lint;
 }

@@ -1,6 +1,6 @@
 import { IError } from "../../interfaces/index";
 import { errorCode, errorMessage } from "./severalH1";
-import lint from "../../linter";
+import lint from "../..";
 
 const trueBlock = `{
     "block": "payment",
